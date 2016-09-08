@@ -7,24 +7,26 @@ fitBUM <- function(cname,Porig,dirname,startab,startlam,tol, na.rm = TRUE ){
 	lam = res$lambda
 	cat("--> final values for alpha, beta: ",a,"\n")
 	cat("--> final values for mixing coefficients: ",lam,"\n")		
-	if(!is.null(dirname))
-		pdf(file=file.path(dirname,paste(cname,"_histogram.pdf",collapse="")))
-	else
-		x11()
-	bum.histogram(x,a,lam,breaks=100)	
-	if(!is.null(dirname))	
-		pdf(file=file.path(dirname,paste(cname,"_QQplot.pdf",collapse="")))
-	else
-		x11()
-	qqbum(x,a,lam)
-	if(is.null(dirname))
-		readline("Press any key to continue...")	
-	dev.off()
-	dev.off()
-	if(!is.null(dirname)){
-		params = list(a=a,lam=lam)
-		save(params, file=file.path(dirname,paste(cname,"_parameter.rda",collapse="")))
-	}
+	try({
+		if(!is.null(dirname))
+			pdf(file=file.path(dirname,paste(cname,"_histogram.pdf",collapse="")))
+		else
+			x11()
+		bum.histogram(x,a,lam,breaks=100)	
+		if(!is.null(dirname))	
+			pdf(file=file.path(dirname,paste(cname,"_QQplot.pdf",collapse="")))
+		else
+			x11()
+		qqbum(x,a,lam)
+		if(is.null(dirname))
+			readline("Press any key to continue...")	
+		dev.off()
+		dev.off()
+		if(!is.null(dirname)){
+			params = list(a=a,lam=lam)
+			save(params, file=file.path(dirname,paste(cname,"_parameter.rda",collapse="")))
+		}
+	})
 	dens = bum.dalt(x,a,lam)	
 }
 
