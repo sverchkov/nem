@@ -23,9 +23,8 @@ if (length(x) == 1) {
     M <- diag(n)
     M[which(M==0)]<-x
     dimnames(M) <- list(name,name)	
-    if(trans.close)    
-    	M <- transitive.closure(M,mat=TRUE,loops=TRUE)    
-    return(list(M))
+    if( trans.close & !transitively.closed( M ) ) return( list() )
+    return ( list( M ) )
   }
   
   models <- apply(bc,1,fkt1,n,name) 
