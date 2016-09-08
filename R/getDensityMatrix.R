@@ -1,6 +1,7 @@
-fitBUM <- function(cname,Porig,dirname,startab,startlam,tol){			
+fitBUM <- function(cname,Porig,dirname,startab,startlam,tol, na.rm = TRUE ){			
 	cat("Fitting BUM model for S-gene ",cname,"\n")
 	x = Porig[,cname]
+	if ( na.rm ) x = x[ !is.na( x ) ]
 	res = bum.EM(x,startab,startlam,tol)
 	a = res$a
 	lam = res$lambda
@@ -27,7 +28,9 @@ fitBUM <- function(cname,Porig,dirname,startab,startlam,tol){
 	dens = bum.dalt(x,a,lam)	
 }
 
-getDensityMatrix = function(Porig, dirname=NULL, startab=c(0.3,10), startlam=c(0.6,0.1,0.3), tol=1e-4){
-	D = sapply(colnames(Porig), fitBUM, Porig=Porig, dirname=dirname, startab=startab, startlam=startlam, tol=tol)	
-	log(D)
+getDensityMatrix = function(Porig, dirname=NULL, startab=c(0.3,10), startlam=c(0.6,0.1,0.3), tol=1e-4, na.rm = TRUE ){
+	D = sapply( colnames(Porig), fitBUM, Porig=Porig, dirname=dirname, startab=startab, startlam=startlam, tol=tol, na.rm = na.rm )	
+	lnD = log( D )
+	if( na.rm ) lnD[ is.na( lnD ) ] = 0;
+	return ( lnD )
 }
