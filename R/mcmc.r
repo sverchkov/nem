@@ -47,7 +47,7 @@ mcmc = function(ratio,nrRuns,theta_init,changeList,logitprior.theta,prior.hidden
     else
       result_intex = i
 
-    theta_list[[result_index]] = theta_i
+    theta_list[[i]] = theta_i # Theta list needs to be maintained for EBayes
     graph2_list[[result_index]] = graph2_i
     ll_list[[result_index]] = ll_i
     pP_list[[result_index]] = pP_i
