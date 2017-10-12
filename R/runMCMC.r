@@ -31,7 +31,7 @@
 # prior.theta		the prior for the signals graph (for the sake of completeness)
 # changeList		the list of edges that can be changed during the sampling process (for the sake of completeness)
 
-runMCMC = function(ratio=NULL,nrRuns=100,theta_init=NULL,prior.theta=NULL,prior.hidden=NULL,maxsteps_eminem=1000,sd_val=1,changeHfreq=NULL,probVal=0.2,ep=0){
+runMCMC = function(ratio=NULL,nrRuns=100,theta_init=NULL,prior.theta=NULL,prior.hidden=NULL,maxsteps_eminem=1000,sd_val=1,changeHfreq=NULL,probVal=0.2,ep=0,lowMemFootprint=FALSE){
 
   # check if ratio matrix is valid
   if(is.null(ratio)){print("Error: no valid ratio matrix provided");return(list())} ## check on non-numeric values (Inf,...), too?
@@ -85,7 +85,7 @@ runMCMC = function(ratio=NULL,nrRuns=100,theta_init=NULL,prior.theta=NULL,prior.
   if(length(changeList)==0){print("Error: all edges are fixed by the prior choice");return(list())}
   
   # start sampling process
-  res = mcmc(ratio=ratio,nrRuns=nrRuns,theta_init=theta_init,changeList=changeList,logitprior.theta=logitprior.theta,prior.hidden=prior.hidden,maxsteps_eminem=maxsteps_eminem,sd_val=sd_val,signals=signals,effects=effects,changeHfreq=changeHfreq,probVal=probVal,ep=ep)
+  res = mcmc(ratio=ratio,nrRuns=nrRuns,theta_init=theta_init,changeList=changeList,logitprior.theta=logitprior.theta,prior.hidden=prior.hidden,maxsteps_eminem=maxsteps_eminem,sd_val=sd_val,signals=signals,effects=effects,changeHfreq=changeHfreq,probVal=probVal,ep=ep,lowMemFootprint=lowMemFootprint)
   
   # add additional information to the output
   res[["prior.theta"]] = prior.theta

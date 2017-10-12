@@ -115,7 +115,7 @@ else if(inference == "mc.eminem"){
 	}
 	else
 		Pe = NULL	
-	result1 = runMCMC(D, nrRuns=control$mcmc.nsamples + control$mcmc.nburnin, theta_init=models[[1]], prior.theta=control$Pm, prior.hidden=Pe, maxsteps_eminem=control$eminem.maxsteps, sd_val=control$eminem.sdVal, probVal=control$Pm.frac_edges, ep=control$lambda, changeHfreq=control$eminem.changeHfreq)		
+	result1 = runMCMC(D, nrRuns=control$mcmc.nsamples + control$mcmc.nburnin, theta_init=models[[1]], prior.theta=control$Pm, prior.hidden=Pe, maxsteps_eminem=control$eminem.maxsteps, sd_val=control$eminem.sdVal, probVal=control$Pm.frac_edges, ep=control$lambda, changeHfreq=control$eminem.changeHfreq, lowMemFootprint=control$lowMemFootprint)
 	result1$avg = getFinalTheta(result1$theta_list, burnin=control$mcmc.nburnin)
 	dimnames(result1$avg) = list(control$Sgenes, control$Sgenes)
 	Phi = (result1$avg > control$prob.cutoff)*1

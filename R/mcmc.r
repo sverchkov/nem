@@ -5,7 +5,7 @@
 # Method description: this method provides the framework for the MCMC sampling
 # parameters: see runMCMC.m
 
-mcmc = function(ratio,nrRuns,theta_init,changeList,logitprior.theta,prior.hidden,maxsteps_eminem,sd_val,signals,effects,changeHfreq,probVal,ep){
+mcmc = function(ratio,nrRuns,theta_init,changeList,logitprior.theta,prior.hidden,maxsteps_eminem,sd_val,signals,effects,changeHfreq,probVal,ep,lowMemFootprint=FALSE){
 
   # initialize the lists where the results of each sampling step are stored
   theta_list = list()
@@ -15,6 +15,9 @@ mcmc = function(ratio,nrRuns,theta_init,changeList,logitprior.theta,prior.hidden
   nrSteps_list = list()
   acc_list = list()
   hidden_list = list()
+
+  # Ensure lowMemFootprint is a logical
+  lowMemFootprint <- !is.null(lowMemFootprint) && lowMemFootprint
   
   # the initial signals graph corresponds to the sampled graph, not to the local maximum -> it has to be optimized, too + the corresponding values have to be calculated
   graph2_i = theta_init
@@ -38,12 +41,18 @@ mcmc = function(ratio,nrRuns,theta_init,changeList,logitprior.theta,prior.hidden
   repeat{
   
     # add the current values to the corresponding results-lists before they are changed (also the last ones BEFORE the sampling is stopped)
-    theta_list[[i]] = theta_i
-    graph2_list[[i]] = graph2_i
-    ll_list[[i]] = ll_i
-    pP_list[[i]] = pP_i
-    nrSteps_list[[i]] = nrSteps_i
-    acc_list[[i]] = acc_i
+    # Except if we're keeping a low memory footprint, then only keep the last value in the result list.
+    if ( lowMemFootprint )
+      result_index = 1
+    else
+      result_intex = i
+
+    theta_list[[result_index]] = theta_i
+    graph2_list[[result_index]] = graph2_i
+    ll_list[[result_index]] = ll_i
+    pP_list[[result_index]] = pP_i
+    nrSteps_list[[result_index]] = nrSteps_i
+    acc_list[[result_index]] = acc_i
     
     # if maximal number of runs is reached -> stop the sampling process
     if (i==nrRuns) break()
